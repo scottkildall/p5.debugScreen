@@ -1,27 +1,31 @@
 /*******************************************************************************************************************
 //
-//  Class: Timer
+//  Class: DebugScreen
 //
 //  Written by Scott Kildall
 //	for P5.js
 //
 //------------------------------------------------------------------------------------------------------------------
-// - Very simple but incredibly useful timer class
-// - Call start() whenever it expires to reset the time
-// - Call expired() to check to see if timer is still active
-//------------------------------------------------------------------------------------------------------------------
-//   Constructor: requires a timer duration, this can always be changed with setTimer()
+//
+//  Member Functions:
+//  Accessors: 
+//  * Draw(): call at the end of your draw loop to see debug text on the screen
+//  * Output(): output a new line of text to the buffer for display
+//  
 *********************************************************************************************************************/
 
 class DebugScreen {
+  // Constrctor
   constructor() {
     this.lines = [];
     this.currentLineNum = 0;
-    this.hOffset = 20;
-    this.vOffset = 25;
+    this.hOffset = 10;
+    this.vOffset = 40;
     this.topDraw = true;
     this.lineHeight = 14;
+    this.rectOffset = 10;
     this.setLineCount(8);
+    this.drawBackgroundRect = true;
 
     // emopty strings for initial display
     for(let i = 0; i < this.numLines; i++ ) {
@@ -29,35 +33,14 @@ class DebugScreen {
     }
   }
   
+//--------- ACCESSORS -----------
   getNumLines() {
     return this.numLines;
   }
 
-  draw() {
-    push();
-    fill(0,255,0);
-    textSize(this.lineHeight);
-    textAlign(LEFT);
-
-    let lineNum = this.currentLineNum;
-
-    let drawY;
-    if( this.topDraw ) {
-      drawY = 25;
-    }
-    else {
-      drawY = height - (this.vOffset + (this.numLines * this.lineHeight) );
-    }
-
-    for( let i = 0; i < this.numLines; i++ ) {
-      text( this.lines[lineNum], this.hOffset, drawY + (i * this.lineHeight) );
-      lineNum++;
-      if( lineNum === this.numLines ) {
-        lineNum = 0;
-      }
-    }
-
-    pop();
+  // pass true to draw a background rect behind text, false to skip it
+  setDrawBackgroundRect(onOrOff) {
+    this.drawBackgroundRect = onOrOff;
   }
 
   drawFromTop() {
@@ -66,16 +49,6 @@ class DebugScreen {
 
   drawFromBottom() {
     this.topDraw = false;
-  }
-
-  // saves line to buffer, converts to string
-  output(s) {
-    this.lines[this.currentLineNum] = String(s);
-
-    this.currentLineNum++;
-    if( this.currentLineNum === this.numLines ) {
-      this.currentLineNum = 0;
-    }
   }
 
   setLineCount(newNumLines) {
@@ -97,4 +70,54 @@ class DebugScreen {
       this.currentLineNum = this.numLines-1
     }
   }
+
+//--------- PUBLIC FUNCTIONS: Use these -----------
+  draw() {
+    push();
+
+    let lineNum = this.currentLineNum;
+
+    // set drawY based on top or bottom drawing
+    let drawY;
+    if( this.topDraw ) {
+      drawY = 25;
+    }
+    else {
+      drawY = height - (this.vOffset + (this.numLines * this.lineHeight) );
+    }
+
+    // rect-drawing
+    noStroke();
+    fill(0,0,0,64);
+    rectMode(CORNER);
+    rect( this.hOffset-this.rectOffset, drawY-this.rectOffset*2, width, this.numLines*this.lineHeight + this.rectOffset*2);
+
+    // text-drawing settings
+    fill(0,255,0);
+    textSize(this.lineHeight);
+    textAlign(LEFT);
+
+    // draw each line
+    for( let i = 0; i < this.numLines; i++ ) {
+      text( this.lines[lineNum], this.hOffset, drawY + (i * this.lineHeight) );
+      lineNum++;
+      if( lineNum === this.numLines ) {
+        lineNum = 0;
+      }
+    }
+
+    pop();
+  }
+
+  // saves line to buffer, converts to string
+  output(s) {
+    this.lines[this.currentLineNum] = String(s);
+
+    this.currentLineNum++;
+    if( this.currentLineNum === this.numLines ) {
+      this.currentLineNum = 0;
+    }
+  }
+
+  
 }
