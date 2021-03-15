@@ -7,8 +7,6 @@
 //
 //------------------------------------------------------------------------------------------------------------------
 //  To add:
-//  - option for the color for text
-//  - change fonts size (change line height variable to match?)
 //  - drawBackgroundRect testing: turn on/off
 //  - background rect to scale to width of background, accessor for this?
 //  - auto-scrolling on/off?
@@ -27,6 +25,8 @@
 //  * lineHeight = change this?? Space between each line
 //  * drawBackgroundRect = true/false, whether we will draw a semi-transparent
 //      background rect behind the text
+//  * setTextSize()/getTextSize() = change font size, lineHeight will also scale
+//  * setTextColor() = change text color
 //  * vOffseet = vertical position for text, offset from top or bottom (no accessor)
 //  * hOffset = horizontal position from text (no accessor)
 //  * rectOffset = offset from text for drawing (no accessor)
@@ -41,10 +41,12 @@ class DebugScreen {
     this.hOffset = 10;
     this.vOffset = 40;
     this.topDraw = true;
-    this.lineHeight = 14;
+    this.textSize = 14 
+    this.lineHeight = this.textSize;
     this.rectOffset = 10;
     this.setLineCount(8);
     this.drawBackgroundRect = true;
+    this.fillColor = color(0,255,0);    // default to bright green
 
     // emopty strings for initial display
     for(let i = 0; i < this.numLines; i++ ) {
@@ -95,6 +97,24 @@ class DebugScreen {
     }
   }
 
+  setTextSize(newTextSize) {
+    if( newTextSize < 6 ) {
+      // too small
+      return;
+    }
+    this.textSize = newTextSize;
+    this.lineHeight = this.textSize;
+  }
+
+  getTextSize(newTextSize) {
+    return this.textSize;
+  }
+
+  // use color() to form argument
+  setTextColor(c) {
+    this.fillColor = c;
+  }
+
 //--------- draw() --> Draw Function -----------
   draw() {
     push();
@@ -111,14 +131,16 @@ class DebugScreen {
     }
 
     // rect-drawing
-    noStroke();
-    fill(0,0,0,64);
-    rectMode(CORNER);
-    rect( this.hOffset-this.rectOffset, drawY-this.rectOffset*2, width, this.numLines*this.lineHeight + this.rectOffset*2);
-
+    if( this.drawBackgroundRect ) {
+      noStroke();
+      fill(0,0,0,64);
+      rectMode(CORNER);
+      rect( this.hOffset-this.rectOffset, drawY-this.rectOffset*2, width, this.numLines*this.lineHeight + this.rectOffset*2);
+    }
+    
     // text-drawing settings
-    fill(0,255,0);
-    textSize(this.lineHeight);
+    fill(this.fillColor);
+    textSize(this.textSize);
     textAlign(LEFT);
 
     // draw each line

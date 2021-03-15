@@ -35,9 +35,12 @@ function draw() {
   background(128);
 
   fill(255);
-  text( "Click on mouse to add debug text", width/2, yTextPos);  
-  text( "Press [t] to switch to top-screen debug screen", width/2, yTextPos + lineHeight); 
-  text( "Press [b] to switch to bottom-screen debug screen", width/2, yTextPos + lineHeight*2); 
+
+  textAlign(LEFT)
+  let textX = width/2;
+  text( "Click on mouse to add debug text", textX, yTextPos);  
+  text( "Press [t] to switch to top-screen debug screen", textX, yTextPos + lineHeight); 
+  text( "Press [b] to switch to bottom-screen debug screen", textX, yTextPos + lineHeight*2); 
 
 
   debugScreen.draw();
@@ -56,14 +59,33 @@ function keyPressed() {
 
   }
 
+  if( key === 'r') {
+    debugScreen.setTextColor(color(255,0,0));
+  }
+
+
+  if( key === 'g') {
+    debugScreen.setTextColor(color(255,0,0));
+  }
+
+  if( key === 'x') {
+    debugScreen.setDrawBackgroundRect(false);
+  }
+
+  if( key === 'y') {
+    debugScreen.setDrawBackgroundRect(true);
+  }
+
   if (keyCode === UP_ARROW) {
     lineCount++;
     debugScreen.setLineCount(lineCount);
+    debugScreen.setTextSize(debugScreen.getTextSize()+1);
   }
 
   if (keyCode ===DOWN_ARROW) {
     lineCount--;
     debugScreen.setLineCount(lineCount);
+    debugScreen.setTextSize(debugScreen.getTextSize()-1);
   }
 
   // show keycode on the screen
