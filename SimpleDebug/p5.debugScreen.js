@@ -6,16 +6,35 @@
 //	for P5.js
 //
 //------------------------------------------------------------------------------------------------------------------
+//  To add:
+//  - option for the color for text
+//  - change fonts size (change line height variable to match?)
+//  - drawBackgroundRect testing: turn on/off
+//  - background rect to scale to width of background, accessor for this?
+//  - auto-scrolling on/off?
+//  - output to a specific line number
+//------------------------------------------------------------------------------------------------------------------
 //
 //  Member Functions:
 //  Accessors: 
 //  * Draw(): call at the end of your draw loop to see debug text on the screen
 //  * Output(): output a new line of text to the buffer for display
 //  
+//  Member Variables:
+//  * lines [] = array of strings
+//  * numLines = number of lines we will display, set with setLineCount()
+//  * topDraw = true/false, whether we display from top of the screen or bottom
+//  * lineHeight = change this?? Space between each line
+//  * drawBackgroundRect = true/false, whether we will draw a semi-transparent
+//      background rect behind the text
+//  * vOffseet = vertical position for text, offset from top or bottom (no accessor)
+//  * hOffset = horizontal position from text (no accessor)
+//  * rectOffset = offset from text for drawing (no accessor)
+//  * currentLine = which line we are drawing to, so we can achieve a scrolling effect
 *********************************************************************************************************************/
 
 class DebugScreen {
-  // Constrctor
+  // Constrctor: set all member vars to defaults, string array to empty strings
   constructor() {
     this.lines = [];
     this.currentLineNum = 0;
@@ -34,6 +53,7 @@ class DebugScreen {
   }
   
 //--------- ACCESSORS -----------
+  // number of lines in the buffer
   getNumLines() {
     return this.numLines;
   }
@@ -43,14 +63,18 @@ class DebugScreen {
     this.drawBackgroundRect = onOrOff;
   }
 
+  // call to draw debug info from the top of the screen
   drawFromTop() {
     this.topDraw = true;
   }
 
+  // call to draw debug info from the bottom of the screen
   drawFromBottom() {
     this.topDraw = false;
   }
 
+  // change the # of lines in the debug buffer - set to 1 line to display
+  // constantly-changing info
   setLineCount(newNumLines) {
     // must have at least one line
     if( newNumLines < 1 ) {
@@ -71,7 +95,7 @@ class DebugScreen {
     }
   }
 
-//--------- PUBLIC FUNCTIONS: Use these -----------
+//--------- draw() --> Draw Function -----------
   draw() {
     push();
 
@@ -109,15 +133,15 @@ class DebugScreen {
     pop();
   }
 
-  // saves line to buffer, converts to string
+//--------- output() --> Add string to text buffer  -----------
+  // saves line to buffer, converts all values to strings
   output(s) {
     this.lines[this.currentLineNum] = String(s);
 
+    // increment current line num for scrolling, zero if past array
     this.currentLineNum++;
     if( this.currentLineNum === this.numLines ) {
       this.currentLineNum = 0;
     }
-  }
-
-  
+  }  
 }
