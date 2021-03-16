@@ -14,107 +14,42 @@
 
 // Make global 
 var debugScreen;
-var yTextPos = 30;
-var lineHeight = 18;
-var lineCount;
+var interactionTable;
+var rowNum = 0;;
+
+function preload() {
+  debugScreen = new DebugScreen();
+
+  debugScreen.print("loading table");
+   // load the table as a table object, fo all other setup functions later
+  interactionTable = loadTable('data/interactionTable.csv', 'csv', 'header');
+
+}
 
 // Setup code goes here
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  textAlign(CENTER);
-  textSize(lineHeight);
-
-  debugScreen = new DebugScreen();
-  lineCount = debugScreen.getNumLines();
- }
+  debugScreen.print(interactionTable.getRowCount() + ' total rows in table');
+  debugScreen.print(interactionTable.getColumnCount() + ' total columns in table');
+}
 
 
 // Draw code goes here
 function draw() {
-  background(128);
-
-  fill(255);
-
-  textAlign(LEFT)
-  let textX = width/2;
-  text( "Click on mouse to add debug text", textX, yTextPos);  
-  text( "Press [t] to switch to top-screen debug screen", textX, yTextPos + lineHeight); 
-  text( "Press [b] to switch to bottom-screen debug screen", textX, yTextPos + lineHeight*2); 
-  text( "Press [a] turn on autoscroll", textX, yTextPos + lineHeight*3); 
-  text( "Press [m] turn off autoscroll", textX, yTextPos + lineHeight*4); 
-
+  background(0);
 
 
   debugScreen.draw();
 }
 
 function keyPressed() {
-  if( key === 't' ) {
-    debugScreen.drawFromTop();
-    debugScreen.print("setting to draw from top");
-    return;
+  if( key === ' ') {
+    rowNum++;
+    debugScreen.print( "rowNum " + rowNum + ":" );
+    if( rowNum === interactionTable.getRowCount() ) {
+      rowNum = 0;
+    }
   }
-
-  if( key === 'b' ) {
-    debugScreen.drawFromBottom();
-    debugScreen.print("setting to draw from bottom");
-
-  }
-
-  if( key === 'r') {
-    debugScreen.setTextColor(color(255,0,0));
-  }
-
-
-  if( key === 'g') {
-    debugScreen.setTextColor(color(255,0,0));
-  }
-
-  if( key === 'x') {
-    debugScreen.setDrawBackgroundRect(false);
-  }
-
-  if( key === 'y') {
-    debugScreen.setDrawBackgroundRect(true);
-    return;
-  }
-
-  if( key === 'a' ) {
-    debugScreen.setAutoScroll(false);
-    return;
-  }
-
-  if( key === 'm' ) {
-    debugScreen.setAutoScroll(true);
-    return;
-  }
-  
-
-  if (keyCode === UP_ARROW) {
-    lineCount++;
-    debugScreen.setLineCount(lineCount);
-    debugScreen.setTextSize(debugScreen.getTextSize()+1);
-  }
-
-  if (keyCode ===DOWN_ARROW) {
-    lineCount--;
-    debugScreen.setLineCount(lineCount);
-    debugScreen.setTextSize(debugScreen.getTextSize()-1);
-  }
-
-  if( debugScreen.getAutoScroll() === false ) {
-    // output to line #2
-    debugScreen.print("keyPressed | keyPressed = " + key, 1 );
-  }
-  else {
-    // show keycode on the screen
-    debugScreen.print("keyPressed | keyPressed = " + key );
-  }
-}
-
-function mousePressed() {
-  // Form a long string with this mouse clicked information
-  debugScreen.print("mouse clicked, x = " + mouseX + " | y = " + mouseY + " | millis() = " + Math.round(millis()) );
 }
 
