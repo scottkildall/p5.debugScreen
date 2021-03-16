@@ -41,6 +41,9 @@ function draw() {
   text( "Click on mouse to add debug text", textX, yTextPos);  
   text( "Press [t] to switch to top-screen debug screen", textX, yTextPos + lineHeight); 
   text( "Press [b] to switch to bottom-screen debug screen", textX, yTextPos + lineHeight*2); 
+  text( "Press [a] turn on autoscroll", textX, yTextPos + lineHeight*3); 
+  text( "Press [m] turn off autoscroll", textX, yTextPos + lineHeight*4); 
+
 
 
   debugScreen.draw();
@@ -49,13 +52,13 @@ function draw() {
 function keyPressed() {
   if( key === 't' ) {
     debugScreen.drawFromTop();
-    debugScreen.output("setting to draw from top");
+    debugScreen.print("setting to draw from top");
     return;
   }
 
   if( key === 'b' ) {
     debugScreen.drawFromBottom();
-    debugScreen.output("setting to draw from bottom");
+    debugScreen.print("setting to draw from bottom");
 
   }
 
@@ -74,7 +77,19 @@ function keyPressed() {
 
   if( key === 'y') {
     debugScreen.setDrawBackgroundRect(true);
+    return;
   }
+
+  if( key === 'a' ) {
+    debugScreen.setAutoScroll(false);
+    return;
+  }
+
+  if( key === 'm' ) {
+    debugScreen.setAutoScroll(true);
+    return;
+  }
+  
 
   if (keyCode === UP_ARROW) {
     lineCount++;
@@ -88,11 +103,18 @@ function keyPressed() {
     debugScreen.setTextSize(debugScreen.getTextSize()-1);
   }
 
-  // show keycode on the screen
-  debugScreen.output("keyPressed | keyPressed = " + key );
+  if( debugScreen.getAutoScroll() === false ) {
+    // output to line #2
+    debugScreen.print("keyPressed | keyPressed = " + key, 1 );
+  }
+  else {
+    // show keycode on the screen
+    debugScreen.print("keyPressed | keyPressed = " + key );
+  }
 }
+
 function mousePressed() {
   // Form a long string with this mouse clicked information
-  debugScreen.output("mouse clicked, x = " + mouseX + " | y = " + mouseY + " | millis() = " + Math.round(millis()) );
+  debugScreen.print("mouse clicked, x = " + mouseX + " | y = " + mouseY + " | millis() = " + Math.round(millis()) );
 }
 

@@ -6,17 +6,16 @@
 //	for P5.js
 //
 //------------------------------------------------------------------------------------------------------------------
-//  To add:
-//  - drawBackgroundRect testing: turn on/off
-//  - background rect to scale to width of background, accessor for this?
-//  - auto-scrolling on/off?
-//  - output to a specific line number
+//  Description: [to be added]
+//
 //------------------------------------------------------------------------------------------------------------------
 //
 //  Member Functions:
 //  Accessors: 
-//  * Draw(): call at the end of your draw loop to see debug text on the screen
-//  * Output(): output a new line of text to the buffer for display
+//  * draw(): call at the end of your draw loop to see debug text on the screen
+//  * write(): write a new line of text to the buffer for display. If auto-scroll
+//    is off, you can select a specific line num
+//  * clear(): will clear debug window
 //  
 //  Member Variables:
 //  * lines [] = array of strings
@@ -37,6 +36,7 @@ class DebugScreen {
   // Constrctor: set all member vars to defaults, string array to empty strings
   constructor() {
     this.lines = [];
+    this.autoScroll = true;
     this.currentLineNum = 0;
     this.hOffset = 10;
     this.vOffset = 40;
@@ -115,6 +115,27 @@ class DebugScreen {
     this.fillColor = c;
   }
 
+  // true or false, will also clear the buffer
+  setAutoScroll(onOrOff) {
+    if( this.autoScroll === onOrOff) {
+      // exit if we are doing the same
+      return;
+    }
+
+    this.autoScroll = onOrOff;
+    if( this.autoScroll === false ) {
+      // correct for drawing
+      this.currentLineNum = 0;
+    }
+
+    this.clear();
+  }
+
+  // true or false
+  getAutoScroll() {
+    return this.autoScroll;
+  }
+
 //--------- draw() --> Draw Function -----------
   draw() {
     push();
@@ -155,15 +176,34 @@ class DebugScreen {
     pop();
   }
 
-//--------- output() --> Add string to text buffer  -----------
+//--------- print() --> Add string to text buffer  -----------
   // saves line to buffer, converts all values to strings
-  output(s) {
-    this.lines[this.currentLineNum] = String(s);
+  // if autoScroll is FALSE, we can output to specific line numbers 
+  print(s, lineNum = 0) {
+    if( this.autoScroll === false ) {
+      // correct for overflow
+      if( lineNum >= this.numLines ) {
+          lineNum = this.numLines - 1;
+      }
 
-    // increment current line num for scrolling, zero if past array
-    this.currentLineNum++;
-    if( this.currentLineNum === this.numLines ) {
-      this.currentLineNum = 0;
+      this.lines[lineNum] = String(s);
     }
-  }  
+    else {
+      // we are auto-scrolling, write to current line num and incrrement
+      this.lines[this.currentLineNum] = String(s);
+
+      // increment current line num for scrolling, zero if past array
+      this.currentLineNum++;
+      if( this.currentLineNum === this.numLines ) {
+        this.currentLineNum = 0;
+      }
+    } 
+  } 
+
+  // clear all lines from buffer
+  clear() {
+    for( let i = 0; i < this.numLines; i++ ) {
+      this.lines[i] = "";
+    }
+  }
 }
