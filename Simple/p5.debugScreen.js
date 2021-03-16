@@ -202,6 +202,7 @@ class DebugScreen {
 
   // clear all lines from buffer
   clear() {
+    this.currentLineNum = 0;
     for( let i = 0; i < this.numLines; i++ ) {
       this.lines[i] = "";
     }
