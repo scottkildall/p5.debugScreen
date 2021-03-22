@@ -12,10 +12,14 @@
   <script src="p5.debugScreen.js"></script>
 ***********************************************************************************/
 
-// Make global 
+// debug variables
 var debugScreen;
+var showDebugScreen = true;
+
+// data information
 var starsTable;
-var rowNum = 0;;
+var rowNum = 0;
+
 
 function preload() {
   debugScreen = new DebugScreen();
@@ -37,24 +41,31 @@ function setup() {
 
 // Draw code goes here
 function draw() {
-  background(0);
+  background(128);
 
 
-  debugScreen.draw();
+  if( showDebugScreen ) {
+    debugScreen.draw();
+  }
 }
 
 
 function keyPressed() {
-  if( key === ' ') {
+  if( key === 'd') {
+    showDebugScreen = !showDebugScreen;
+  }
+
+  // show next screen
+  if( key === 'n') {
     
     debugScreen.clear();
 
     // generate data
-    commonName = starsTable.getString(rowNum, 'Common Name');
-    x = starsTable.getString(rowNum, 'X');
-    y = starsTable.getString(rowNum, 'Y');
-    z = starsTable.getString(rowNum, 'Z');
-    d = sqrt(pow(x,2) + pow(y,2) + pow(z,2));
+    let commonName = starsTable.getString(rowNum, 'Common Name');
+    let x = starsTable.getString(rowNum, 'X');
+    let y = starsTable.getString(rowNum, 'Y');
+    let z = starsTable.getString(rowNum, 'Z');
+    let d = sqrt(pow(x,2) + pow(y,2) + pow(z,2));
 
     debugScreen.print( "rowNum " + rowNum + ":" );
     debugScreen.print(commonName);

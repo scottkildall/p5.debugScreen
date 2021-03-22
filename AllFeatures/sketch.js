@@ -41,10 +41,14 @@ function draw() {
   text( "Click on mouse to add debug text", textX, yTextPos);  
   text( "Press [t] to switch to top-screen debug screen", textX, yTextPos + lineHeight); 
   text( "Press [b] to switch to bottom-screen debug screen", textX, yTextPos + lineHeight*2); 
-  text( "Press [a] turn on autoscroll", textX, yTextPos + lineHeight*3); 
-  text( "Press [m] turn off autoscroll", textX, yTextPos + lineHeight*4); 
-
-
+  text( "Press [a] to turn ON autoscroll", textX, yTextPos + lineHeight*3); 
+  text( "Press [m] to turn OFF autoscroll", textX, yTextPos + lineHeight*4); 
+  text( "Press [x] to turn OFF background rect", textX, yTextPos + lineHeight*5); 
+  text( "Press [y] to turn ON background rect", textX, yTextPos + lineHeight*6); 
+  text( "Press [r] to change color to RED", textX, yTextPos + lineHeight*7); 
+  text( "Press [g] to change color to GREEN", textX, yTextPos + lineHeight*8); 
+  text( "Press UP ARROW to increase font size", textX, yTextPos + lineHeight*9);
+  text( "Press DOWN ARROW to decrease font size", textX, yTextPos + lineHeight*10);
 
   debugScreen.draw();
 }

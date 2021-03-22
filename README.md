@@ -20,36 +20,71 @@ Then, add the line below to the index.html file so that you can access it in you
 
 ## Functions
 
-###constructor();
+###constructor()
 This will allocate the DebugScreen object
 
 e.g.
 
 var debugScreen = new DebugScreen();
 
-###start();
-This will start the timer
 
-simpleTimer.start()
+###getNumLines()
+returns number of lines that we are drawing to the screen. Default is 8.
 
-###setTimer(_duration) 
-Changes the duration of the timer, also in milliseconds
-
-###expired();
-Returns true if the timer is expired, false if it is still running.
-
-###getRemainingTime();
-Returns the number of milliseconds left in the timer, zeero if it is expired
-
-###getPercentageRemaining();
-Returns percentage remaining in the timer, 0.0 through 1.0. If expired, will return 0.0
+var numLines = debugScreen.getNumLines()
 
 
-###getPercentageElapsed();
-Returns percentage elapsed in the timer, 0.0 through 1.0. If expired, will return 1.0
+  // pass true to draw a background rect behind text, false to skip it
+  setDrawBackgroundRect(onOrOff) {
+    this.drawBackgroundRect = onOrOff;
+  }
 
+  // call to draw debug info from the top of the screen
+  drawFromTop() {
+    this.topDraw = true;
+  }
 
-getPercentageRemaining() + getPercentageElapsed() should always be 1.0
+  // call to draw debug info from the bottom of the screen
+  drawFromBottom() {
+    this.topDraw = false;
+  }
 
+  // change the # of lines in the debug buffer - set to 1 line to display
+  // constantly-changing info
+  setLineCount(newNumLines) {
+    // must have at least one line
+    if( newNumLines < 1 ) {
+      return;
+    }
+
+    // if more lines, the we initialize the new lines to empty strings
+    if( newNumLines > this.numLines ) {
+      for(let i = this.numLines; i < newNumLines; i++ ) {
+        this.lines[i] = "";
+      }
+    }
+
+    // set to new number, make sure current line num doesn't overflow
+    this.numLines = newNumLines; 
+    if( this.currentLineNum >= this.numLines ) {
+      this.currentLineNum = this.numLines-1
+    }
+  }
+
+  setTextSize(newTextSize) {
+    if( newTextSize < 6 ) {
+      // too small
+      return;
+    }
+    this.textSize = newTextSize;
+    this.lineHeight = this.textSize;
+  }
+
+  getTextSize(newTextSize) {
+    return this.textSize;
+  }
+
+  // use color() to form argument
+  setTextColor
 ## License
 CC BY: This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.
