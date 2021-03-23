@@ -25,66 +25,70 @@ This will allocate the DebugScreen object
 
 e.g.
 
-var debugScreen = new DebugScreen();
+`var debugScreen = new DebugScreen();`
 
+###print(s, lineNum = 0)
+prints text to screen buffer, line number is an optional paramter, which only gets used if autoscroll is turned off
+
+`debugScreen.print("hello, world") // prints to bottom line, if autoscrolling is on`
+`debugScreen.print("hello, city",1)	// prints to 2nd line`
+
+###clear()
+Clears all text from debug screen buffer
+
+`debugScreen.clear()`
+
+###draw()
+Draws the debug screen buffer
+
+`debugScreen.debug()`
+
+###setLineCount(newNumLines)
+sets number of lines we are drawing to the screen
+
+`debugScreen.setLineCount(12) // draws 12 lines to screen`
 
 ###getNumLines()
 returns number of lines that we are drawing to the screen. Default is 8.
 
-var numLines = debugScreen.getNumLines()
+`var numLines = debugScreen.getNumLines();`
 
 
-  // pass true to draw a background rect behind text, false to skip it
-  setDrawBackgroundRect(onOrOff) {
-    this.drawBackgroundRect = onOrOff;
-  }
+###setDrawBackgroundRect(onOrOff) 
+sets the background rect to be drawn or not
 
-  // call to draw debug info from the top of the screen
-  drawFromTop() {
-    this.topDraw = true;
-  }
+`debugScreen.setDrawBackgroundRect(true);  // draws background rect`
 
-  // call to draw debug info from the bottom of the screen
-  drawFromBottom() {
-    this.topDraw = false;
-  }
+`debugScreen.setDrawBackgroundRect(true);  // will not draw background rect`
 
-  // change the # of lines in the debug buffer - set to 1 line to display
-  // constantly-changing info
-  setLineCount(newNumLines) {
-    // must have at least one line
-    if( newNumLines < 1 ) {
-      return;
-    }
 
-    // if more lines, the we initialize the new lines to empty strings
-    if( newNumLines > this.numLines ) {
-      for(let i = this.numLines; i < newNumLines; i++ ) {
-        this.lines[i] = "";
-      }
-    }
+### drawFromTop() {
+Draw debug info from top of screen (this is the default)
 
-    // set to new number, make sure current line num doesn't overflow
-    this.numLines = newNumLines; 
-    if( this.currentLineNum >= this.numLines ) {
-      this.currentLineNum = this.numLines-1
-    }
-  }
+`debugScreen.drawFromTop();   // change display to top of screen
+`  
 
-  setTextSize(newTextSize) {
-    if( newTextSize < 6 ) {
-      // too small
-      return;
-    }
-    this.textSize = newTextSize;
-    this.lineHeight = this.textSize;
-  }
+### drawFromBottom() 
+Draw debug info from bottom of screen
 
-  getTextSize(newTextSize) {
-    return this.textSize;
-  }
+`debugScreen.drawFromBottom();   // change display to top of screen`  
 
-  // use color() to form argument
-  setTextColor
+### setTextSize(newTextSize) 
+Change font size. Can't be < 6.
+ 
+`debugScreen.setTextSize();   // change to 14 point`  
+
+### getTextSize() 
+Returns font size.
+ 
+`fontSize = debugScreen.getTextSize();`   
+
+### setTextColor()
+Sets text color.
+
+`debugScreen.setTextSize(color(255,0,0));   // change to red`  
+
+
+
 ## License
 CC BY: This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows for commercial use.

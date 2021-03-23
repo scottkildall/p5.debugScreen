@@ -106,7 +106,7 @@ class DebugScreen {
     this.lineHeight = this.textSize;
   }
 
-  getTextSize(newTextSize) {
+  getTextSize() {
     return this.textSize;
   }
 
